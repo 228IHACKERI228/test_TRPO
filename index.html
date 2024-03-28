@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1">
+    <title>Тест и Кроссворд</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #fff;
+        }
+        .tabs {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tab-container {
+            display: inline-block;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .tab:hover {
+            background-color: #444;
+        }
+        .tab.active {
+            background-color: #555;
+        }
+        .content {
+            padding: 20px;
+        }
+        .question-number {
+            font-weight: bold;
+        }
+        /* Измененные стили для кнопок */
+        #options {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        #options button {
+            margin: 5px 0;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            transition: background-color 0.3s ease;
+            flex: 1;
+        }
+
+        #options button:hover {
+            background-color: #444;
+        }
+
+        #nextQuestionBtn, #finishTestBtn {
+            display: block;
+            margin-top: 20px;
+            margin-right: auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        #nextQuestionBtn:hover, #finishTestBtn:hover {
+            background-color: #444;
+        }
+
+        
+        
+        #crosswordTable {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #crosswordTable td {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #crosswordTable td:focus {
+            outline: none;
+            background-color: #aaf;
+        }
+
+        #crosswordTable td.correct {
+            background-color: #afa;
+        }
+
+        #crosswordTable td.wrong {
+            background-color: #faa;
+        }
+
+        #checkCross{
+            margin: 0 auto;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        #checkCross:hover{
+            background-color: #444;
+        }
+
+        .inpt-cross{
+            text-transform: uppercase;
+            width: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="tabs">
+        <div class="tab-container">
+            <div class="tab active" onclick="openTab('test')">Тест</div>
+            <div class="tab" onclick="openTab('crossword')">Кроссворд</div>
+        </div>
+    </div>
+    <div id="test" class="content" style="display: block; background: #292929; margin: 10px 20px 0 20px">
+        <h2 style="text-align: left; margin: 0 0 10px 0;">ТЕСТ</h2>
+        <div id="question" style="text-align: left; margin-bottom: 20px;"></div>
+        <div id="options" style="width: fit-content;"></div>
+        <button id="nextQuestionBtn" onclick="nextQuestion()" style="display: none;">Следующий вопрос</button>
+        <button id="finishTestBtn" onclick="finishTest()" style="display: none;">Завершить тест</button>
+        <div id="rating" style="display: none;">
+            <label for="ratingValue">Поставьте оценку от 1 до 10:</label>
+            <input type="number" id="ratingValue" min="1" max="10">
+        </div>
+    </div>
+    <div id="crossword" class="content" style="display: none; background: #292929; margin: 10px 20px 0 20px">
+        <h2 style="margin: 0;">КРОССВОРД</h2>
+        <div style="display: flex;">
+            <table id="crosswordTable">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>4</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>2</td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="П"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>3</td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="К"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>1</td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Т"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Е"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Ц"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="О"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Н"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Н"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Я"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Е"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="С"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Е"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="С"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="К"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="К"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Т"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Т"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Д"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Н"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>6</td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="З"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Б"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="О"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Т"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="К"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="О"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="В"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Я"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="В"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="С"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="П"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Р"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Л"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Ь"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Н"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Я"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="А"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Н"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Н"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="И"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Е"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input class="inpt-cross" maxlength="1" data-info="Е"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <!-- продолжайте добавлять строки, пока не создадите кроссворд полностью -->
+            </table>
+            <div style="margin-left: 40px;">
+                <p>
+                    1 -	Модель, суть которой заключается в разбиении проекта на части и прохождение этапов жизненного цикла на каждом из них.
+                </p>
+                <p>
+                    2 -	Модель, основная суть которой в том, что этапы зависят друг от друга и следующий начинается тогда, когда заканчивается предыдущий, образуя таким образом проступание деления вперёд.
+                </p>
+                <p>
+                    3 -	Отвечает за то, насколько качественна была разработка и насколько качественным «выйдет» программное обеспечение.
+                </p>
+                <p>
+                    4 -	На этой стадии выполняется разработка внутренней архитектуры продукта, а также подбирают стек необходимых технологий и инструментов.
+                </p>
+                <p>
+                    5 -	У этой модели все этапы жизненного цикла при спиральный модели идут виткам на каждом из которых происходит проектирование, кодирование, дизайн, тестирование.
+                </p>
+                <p>
+                    6 -	На этом этапе происходит реализация ПО с помощью кода.
+                </p>
+            </div>
+        </div>
+        <button id="checkCross" onclick="checkCrossword()" style="text-align: center; width: auto; margin: 0 auto;">Проверить</button>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const questions = [
+        {
+            question: 'Что такое жизненный цикл разработки программного обеспечения?',
+            options: [
+                'Это процесс создания программного обеспечения',
+                'Это период времени, в течение которого разрабатывается ПО',
+                'Это последовательность этапов разработки ПО от начала до завершения'
+            ],
+            correctAnswer: 2
+        },
+        {
+            question: 'Что представляет собой методология Agile разработки программного обеспечения?',
+            options: [
+                'Гибкая и итеративная методология разработки, уделяющая внимание командной работе и быстрой адаптации к изменениям',
+                'Традиционная методология разработки, основанная на строгом планировании и последовательном выполнении этапов',
+                'Методология, которая сфокусирована на быстрой разработке ПО без учета требований клиента'
+            ],
+            correctAnswer: 0
+        },
+        {
+            question: 'Что такое версионирование кода в разработке ПО?',
+            options: [
+                'Процесс создания копий кода на разных языках программирования',
+                'Система управления изменениями кода, которая позволяет отслеживать и контролировать изменения в исходном коде',
+                'Процесс создания и поддержки различных версий программного обеспечения'
+            ],
+            correctAnswer: 1
+        },
+        {
+            question: 'Что представляет собой тестирование программного обеспечения?',
+            options: [
+                'Это процесс проверки исправности оборудования для разработки программного обеспечения',
+                'Это процесс анализа требований к программному обеспечению',
+                'Это процесс проверки функциональности и качества программного обеспечения'
+            ],
+            correctAnswer: 2
+        },
+        {
+            question: 'Что такое интеграционное тестирование в разработке ПО?',
+            options: [
+                'Тестирование интерфейсов пользователя программного обеспечения',
+                'Тестирование интеграции различных компонентов или модулей программного обеспечения',
+                'Тестирование программного обеспечения на соответствие стандартам безопасности'
+            ],
+            correctAnswer: 1
+        },
+        {
+            question: 'Какую роль играет документация в разработке программного обеспечения?',
+            options: [
+                'Документация не играет роли в разработке ПО',
+                'Документация используется только для внутреннего использования разработчиками',
+                'Документация является важной составной частью процесса разработки, описывая требования, архитектуру, инструкции и т.д.'
+            ],
+            correctAnswer: 2
+        },
+        {
+            question: 'Какие основные фазы включает в себя жизненный цикл разработки ПО?',
+            options: [
+                'Планирование, анализ, проектирование, реализация, тестирование, сопровождение',
+                'Инициация, планирование, выполнение, контроль и завершение',
+                'Дизайн, кодирование, проверка, внедрение, сопровождение'
+            ],
+            correctAnswer: 0
+        },
+        {
+            question: 'Что такое методология Waterfall в разработке программного обеспечения?',
+            options: [
+                'Методология, при которой каждый этап разработки следует за предыдущим в строгом порядке, без возврата на предыдущие этапы',
+                'Методология, которая подразумевает поэтапную разработку программного обеспечения с возможностью корректировки на любом этапе',
+                'Методология, при которой разработка ПО выполняется непрерывно, без четкого разделения на этапы'
+            ],
+            correctAnswer: 0
+        },
+        {
+            question: 'Что такое Scrum в Agile методологии разработки программного обеспечения?',
+            options: [
+                'Методология, включающая в себя короткие спринты, регулярные встречи и акцент на командной работе и быстрой адаптации к изменениям',
+                'Методология, которая ориентирована на строгое планирование и последовательное выполнение этапов разработки',
+                'Методология, при которой разработка ПО выполняется без учета требований заказчика'
+            ],
+            correctAnswer: 0
+        },
+        {
+            question: 'Что такое Git?',
+            options: [
+                'Система управления базами данных',
+                'Система управления контентом',
+                'Система управления версиями кода'
+            ],
+            correctAnswer: 2
+        }
+        ];
+        let totalScore = 0;
+    
+        function openTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.style.display = 'none');
+    
+            document.getElementById(tabName).style.display = 'block';
+    
+    
+            if (tabName === 'test') {
+                displayQuestion();
+            }
+        }
+    
+        function displayQuestion() {
+            if (currentQuestion < questions.length) {
+                const currentQ = questions[currentQuestion];
+                document.getElementById('question').innerText = `Вопрос ${currentQuestion + 1}: ${currentQ.question}`;
+                const optionsDiv = document.getElementById('options');
+                optionsDiv.innerHTML = '';
+                currentQ.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.innerText = option;
+                    button.setAttribute('onclick', `checkAnswer(${index})`);
+                    optionsDiv.appendChild(button);
+                });
+            } else {
+                document.getElementById('question').innerText = 'Тест завершен';
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('nextQuestionBtn').style.display = 'none';
+                document.getElementById('finishTestBtn').style.display = 'block';
+            }
+        }
+    
+        function checkAnswer(answerIndex) {
+            const currentQ = questions[currentQuestion];
+            const options = document.querySelectorAll('#options button');
+            options.forEach((button, index) => {
+                if (index === currentQ.correctAnswer) {
+                    button.style.backgroundColor = 'green';
+                } else if (index === answerIndex) {
+                    button.style.backgroundColor = 'red';
+                }
+                button.disabled = true;
+            });
+            if (answerIndex === currentQ.correctAnswer) {
+                totalScore++; // Увеличиваем балл за правильный ответ
+            }
+            document.getElementById('nextQuestionBtn').style.display = 'block';
+        }
+
+    
+        function nextQuestion() {
+            currentQuestion++;
+            displayQuestion();
+            const options = document.querySelectorAll('#options button');
+            options.forEach(button => {
+                button.style.backgroundColor = '';
+                button.disabled = false;
+            });
+            document.getElementById('nextQuestionBtn').style.display = 'none';
+        }
+    
+        function finishTest() {
+            const maxScore = questions.length * 2; // Максимальный балл за все вопросы
+            const userScore = totalScore * 2; // Полученный балл пользователя
+            const resultRating = Math.floor((userScore / maxScore) * 10); // Оценка результата пользователя
+            alert(`Тест завершен. Ваша оценка: ${resultRating} из 10.`);
+            // Скрыть блок оценки и сбросить значения
+            document.getElementById('rating').style.display = 'none';
+            document.getElementById('ratingValue').value = '';
+            // Убрать кнопку завршения теста
+            document.getElementById('finishTestBtn').style.display = 'none';
+            // Сбросить тест
+            resetTest();
+        }
+    
+        function resetTest() {
+            currentQuestion = 0;
+            totalScore = 0;
+            openTab('test');
+        }
+
+        function checkCrossword() {
+            // Получаем все ячейки таблицы
+            const cells = document.querySelectorAll('#crosswordTable td');
+
+            cells.forEach(cell => {
+                // Проверяем наличие input в ячейке
+                const input = cell.querySelector('input');
+                if (input) {
+                    // Получаем значение введенного пользователем текста
+                    const inputValue = input.value.trim().toLowerCase();
+                    // Получаем data-info для сравнения
+                    const dataInfo = input.getAttribute('data-info').toLowerCase();
+                    // Проверяем совпадение введенного текста с data-info
+                    if (inputValue === dataInfo) {
+                        // Если совпадает, устанавливаем класс correct
+                        cell.classList.remove('wrong');
+                        cell.classList.add('correct');
+                    } else {
+                        // Если не совпадает, устанавливаем класс wrong
+                        cell.classList.remove('correct');
+                        cell.classList.add('wrong');
+                    }
+                }
+            });
+        }
+
+    
+        openTab('test'); // По умолчанию открываем тест
+    </script>
+</body>
+</html>
